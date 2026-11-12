@@ -21,6 +21,9 @@
 
   <!-- Gear button (hidden until hover, position configurable) -->
   <div class="gear-wrap pos-tr" id="gearWrap">
+    <button class="icon-btn" id="btnLayers" title="Layers — select any element" aria-label="Open layers">
+      <svg viewBox="0 0 24 24"><path d="M12 2 2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </button>
     <button class="icon-btn" id="btnSettings" title="Settings" aria-label="Open settings">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 0 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.6V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.6h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.6 1h.1a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>
     </button>
@@ -53,7 +56,7 @@
 
     </section>
 
-    <section class="pin-zone" data-widget="pins">
+    <section class="pin-zone" id="pinZone" data-widget="pins">
       <div class="pin-grid" id="pinGrid"></div>
     </section>
 
@@ -190,9 +193,21 @@
 
     <div class="settings-tab-panel" id="panel-appearance">
       <div class="setting-group">
-        <label class="setting-label">Wallpaper (auto theme)</label>
-        <div class="theme-grid" id="wallpaperGrid"></div>
-        <button type="button" class="pill-btn ghost full" id="wallShuffle" style="margin-top:10px">🎲 Shuffle wallpaper</button>
+        <label class="setting-label">Custom theme</label>
+        <div class="theme-colors">
+          <label>Background 1 <input type="color" id="themeBg1" /></label>
+          <label>Background 2 <input type="color" id="themeBg2" /></label>
+          <label>Primary accent <input type="color" id="themeAccent" /></label>
+          <label>Secondary accent <input type="color" id="themeAccent2" /></label>
+          <label>Third accent <input type="color" id="themeAccent3" /></label>
+        </div>
+        <label class="setting-label inline" style="margin-top:10px">Text mode</label>
+        <div class="seg" id="themeDarkSeg">
+          <button data-dark="on">Dark text</button>
+          <button data-dark="off">Light text</button>
+        </div>
+        <div class="setting-hint">Pick your own colors or hit 🎲 to auto-generate a random palette.</div>
+        <button type="button" class="pill-btn ghost full" id="wallShuffle" style="margin-top:10px">🎲 Surprise me</button>
       </div>
 
       <div class="setting-group">
@@ -296,6 +311,12 @@
           <label>Break <input type="number" id="breakDur" min="1" max="60" /></label>
           <label>Deep <input type="number" id="deepDur" min="1" max="240" /></label>
         </div>
+        <label class="setting-label inline" style="margin-top:10px">Time format</label>
+        <select class="select-input" id="timerFormatSelect">
+          <option value="ms">mm:ss.mmm (milliseconds)</option>
+          <option value="s">mm:ss</option>
+          <option value="hms">h:mm:ss</option>
+        </select>
       </div>
 
       <div class="setting-group">
@@ -383,10 +404,25 @@
       </div>
 
       <div class="setting-group">
+        <label class="setting-label">Move mode</label>
+        <div class="seg" id="mvSeg">
+          <button data-mv="on">On</button>
+          <button data-mv="off" class="active">Off</button>
+        </div>
+        <div class="setting-hint">Turn on to drag, resize, and arrange any element (clock, search, pins, dock, widgets). Placements are saved.</div>
+      </div>
+
+      <div class="setting-group">
         <label class="setting-label">Configuration</label>
         <button class="pill-btn ghost full" id="exportCfg">Export config (download)</button>
         <button class="pill-btn ghost full" id="importCfg" style="margin-top:6px">Import config…</button>
         <input type="file" id="importCfgFile" accept="application/json,.json" hidden />
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Reset</label>
+        <button class="pill-btn ghost full" id="resetLayoutBtn">Reset layout (default positions)</button>
+        <button class="pill-btn ghost full" id="resetAllBtn" style="margin-top:6px">Reset all settings</button>
       </div>
     </div>
   </aside>
@@ -543,6 +579,10 @@
         <div class="about-ks"><code>Ctrl+,</code><span>settings</span></div>
         <div class="about-ks"><code>Esc</code><span>close</span></div>
         <div class="about-ks"><code>Ctrl+Shift+/</code><span>about</span></div>
+        <div class="about-ks"><code>Ctrl+Shift+M</code><span>toggle move mode</span></div>
+        <div class="about-ks"><code>Ctrl+Shift+L</code><span>open/close layers</span></div>
+        <div class="about-ks"><code>Esc</code><span>deselect / exit move mode</span></div>
+        <div class="about-ks"><code>← → ↑ ↓</code><span>nudge selected element</span></div>
       </div>
 
       <div class="about-credits">Made by <strong>MalikxDev</strong> 🔥 · Vibe Devs · MIT License</div>
@@ -576,6 +616,52 @@
       </div>
     </div>
   </div>
+
+  <!-- ===== Move-mode properties panel ===== -->
+  <!-- ===== Layers panel (select any element, even overlapped) ===== -->
+  <aside class="layer-panel" id="layerPanel" role="dialog" aria-label="Layers" hidden>
+    <div class="mp-head" id="layerHead" title="Drag to move panel">
+      <div class="mp-title-group">
+        <span class="mp-kind">Layers</span>
+        <span class="mp-title">Elements</span>
+      </div>
+      <button class="icon-btn small" id="layerClose" aria-label="Close layers">✕</button>
+    </div>
+    <div class="layer-list" id="layerList"></div>
+  </aside>
+
+  <aside class="move-panel" id="movePanel" role="dialog" aria-label="Element properties" hidden>
+    <div class="mp-head" id="mpHead" title="Drag to move panel">
+      <div class="mp-title-group">
+        <span class="mp-kind" id="mpKind">Component</span>
+        <span class="mp-title" id="mpTitle"></span>
+      </div>
+      <button class="icon-btn small" id="mpClose" aria-label="Close properties">✕</button>
+    </div>
+    <div class="mp-body">
+      <div class="mp-sec">
+        <div class="mp-sec-title">Position &amp; Size</div>
+        <label class="mp-row">Left <input type="range" id="mpX" min="0" max="100" step="1" /><span class="mp-val" id="mpXv">0</span></label>
+        <label class="mp-row">Top <input type="range" id="mpY" min="0" max="100" step="1" /><span class="mp-val" id="mpYv">0</span></label>
+        <label class="mp-row">Width <input type="range" id="mpW" min="5" max="120" step="1" /><span class="mp-val" id="mpWv">0</span></label>
+        <label class="mp-row">Height <input type="range" id="mpH" min="5" max="120" step="1" /><span class="mp-val" id="mpHv">0</span></label>
+      </div>
+      <div class="mp-sec">
+        <div class="mp-sec-title">Appearance</div>
+        <label class="mp-row">Opacity <input type="range" id="mpOp" min="20" max="100" step="5" /><span class="mp-val" id="mpOpv">100</span></label>
+        <label class="mp-row">Background <input type="range" id="mpBg" min="0" max="100" step="5" /><span class="mp-val" id="mpBgv">55</span></label>
+        <label class="mp-row mp-check"><span>Show</span><input type="checkbox" id="mpVis" /></label>
+      </div>
+      <div class="mp-sec">
+        <div class="mp-sec-title">Order</div>
+        <div class="mp-row mp-btns">
+          <button class="pill-btn ghost" id="mpFront">To front</button>
+          <button class="pill-btn ghost" id="mpBack">To back</button>
+        </div>
+      </div>
+      <button class="pill-btn ghost full" id="mpReset">Reset position</button>
+    </div>
+  </aside>
 
   <script src="app.js?v=1.8.0"></script>
 </body>
