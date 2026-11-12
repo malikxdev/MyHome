@@ -972,6 +972,13 @@
           saveState(); renderPins();
         }
       });
+      ["n","s","e","w","ne","nw","se","sw"].forEach((d) => {
+        const r = document.createElement("span");
+        r.className = "mv-resize dir-" + d;
+        r.dataset.dir = d;
+        r.title = "Resize";
+        a.appendChild(r);
+      });
       grid.appendChild(a);
     });
   }
@@ -1739,11 +1746,12 @@
   function renderLayers() {
     const list = $("#layerList");
     list.innerHTML = "";
-    const add = (kind, label, onClick, active) => {
+    const add = (kind, label, onSelect, active) => {
       const b = document.createElement("button");
       b.className = "layer-item" + (active ? " active" : "");
       b.innerHTML = `<span class="mp-kind">${kind}</span><span class="layer-name">${esc(label)}</span>`;
-      b.addEventListener("click", onClick);
+      b.addEventListener("click", () => { onSelect(); $("#layerPanel").hidden = true; });
+      b.addEventListener("contextmenu", (e) => { e.preventDefault(); onSelect(); });
       list.appendChild(b);
     };
     MV_KEYS.forEach((k) => {
@@ -1751,7 +1759,6 @@
       add("Component", (meta && meta.label) || k, () => {
         bringToFront(k);
         selectEl(k);
-        $("#layerPanel").hidden = true;
       }, selKey === k && selPin === null);
     });
     currentPins().forEach((pin, idx) => {
@@ -1759,7 +1766,6 @@
         if (pin.pp) { pin.pp.z = 99; saveState(); }
         else { pin.pp = { x: 50, y: 50, w: 10, h: 10, z: 99 }; saveState(); renderPins(); }
         selectPin(idx, null);
-        $("#layerPanel").hidden = true;
       }, selPin === idx);
     });
   }
@@ -1886,16 +1892,40 @@
     });
     return items.sort((a, b) => b.z - a.z);
   }
-  function cycleSelectAt(x, y) {
+  function selectAt(x, y) {
     const stack = stackedElementsAt(x, y);
     if (!stack.length) return;
-    const curSel = selPin !== null ? "pin" : (selKey !== null ? selKey : null);
-    const curIdx = stack.findIndex((it) =>
-      it.kind === "comp" ? it.key === curSel : (curSel === "pin" && it.idx === selPin)
-    );
-    const next = stack[(curIdx + 1) % stack.length];
-    if (next.kind === "comp") selectEl(next.key);
-    else selectPin(next.idx, next.el);
+    if (stack.length === 1) {
+      const it = stack[0];
+      if (it.kind === "comp") selectEl(it.key);
+      else selectPin(it.idx, it.el);
+      return;
+    }
+    showChooser(x, y, stack);
+  }
+  function showChooser(x, y, stack) {
+    document.querySelectorAll("#layerChooser").forEach((n) => n.remove());
+    const c = document.createElement("div");
+    c.id = "layerChooser";
+    c.className = "layer-chooser";
+    stack.forEach((it) => {
+      const b = document.createElement("button");
+      b.className = "layer-item";
+      let label = "Element";
+      if (it.kind === "comp") label = (WIDGET_META[it.key] && WIDGET_META[it.key].label) || it.key;
+      else { const pi = currentPins()[it.idx]; if (pi) label = pi.name || pi.url; }
+      b.innerHTML = `<span class="mp-kind">${it.kind === "comp" ? "Component" : "Pin"}</span><span class="layer-name">${esc(label)}</span>`;
+      b.addEventListener("click", () => {
+        if (it.kind === "comp") selectEl(it.key);
+        else selectPin(it.idx, it.el);
+        c.remove();
+      });
+      c.appendChild(b);
+    });
+    document.body.appendChild(c);
+    const cr = c.getBoundingClientRect();
+    c.style.left = Math.max(8, Math.min(x, innerWidth - cr.width - 8)) + "px";
+    c.style.top = Math.max(8, Math.min(y + 6, innerHeight - cr.height - 8)) + "px";
   }
 
   function addDragInteractions(el, key) {
@@ -1903,19 +1933,35 @@
       if (!state.moveMode) return;
       if (e.button !== 0) return;
       if (e.target.closest("input, textarea, select, .pin-cell")) return;
-      const resize = !!e.target.closest(".mv-resize");
+      const dirEl = e.target.closest(".mv-resize");
+      const resize = !!dirEl;
+      const dir = dirEl ? dirEl.dataset.dir : "";
       e.preventDefault();
       const rect = el.getBoundingClientRect();
       const start = mvGetPos(key);
       const iw = innerWidth, ih = innerHeight;
       // Base box + the exact grab offset so the grabbed spot stays under the pointer.
-      const base = start
-        ? { x: start.x, y: start.y, w: start.w || rect.width * 100 / iw, h: start.h || rect.height * 100 / ih }
-        : { x: rect.left * 100 / iw, y: rect.top * 100 / ih, w: rect.width * 100 / iw, h: rect.height * 100 / ih };
+      const base = {
+        x: (start && start.x != null) ? start.x : rect.left * 100 / iw,
+        y: (start && start.y != null) ? start.y : rect.top * 100 / ih,
+        w: (start && start.w != null) ? start.w : rect.width * 100 / iw,
+        h: (start && start.h != null) ? start.h : rect.height * 100 / ih,
+      };
       const offX = (e.clientX - rect.left) * 100 / iw;
       const offY = (e.clientY - rect.top) * 100 / ih;
       const sx = e.clientX, sy = e.clientY;
       let dragged = false;
+      const MIN = 5;
+      const resizeBox = (d, dW, dH) => {
+        let x = base.x, y = base.y, w = base.w, h = base.h;
+        if (d.includes("e")) w = base.w + dW;
+        if (d.includes("s")) h = base.h + dH;
+        if (d.includes("w")) { x = base.x + dW; w = base.w - dW; }
+        if (d.includes("n")) { y = base.y + dH; h = base.h - dH; }
+        if (w < MIN) { if (d.includes("w")) { w = MIN; x = base.x + base.w - MIN; } else w = MIN; }
+        if (h < MIN) { if (d.includes("n")) { h = MIN; y = base.y + base.h - MIN; } else h = MIN; }
+        return { x: clamp(0, 100, x), y: clamp(0, 100, y), w: clamp(MIN, 120, w), h: clamp(MIN, 120, h) };
+      };
       const prevZ = el.style.zIndex;
       try { el.setPointerCapture(e.pointerId); } catch (err) {}
       const mm = (ev) => {
@@ -1924,7 +1970,7 @@
         dragged = true;
         let p;
         if (resize) {
-          p = { x: base.x, y: base.y, w: clamp(5, 120, base.w + dx * 100 / iw), h: clamp(5, 120, base.h + dy * 100 / ih) };
+          p = resizeBox(dir, dx * 100 / iw, dy * 100 / ih);
         } else {
           p = { x: clamp(0, 100, (ev.clientX * 100 / iw) - offX), y: clamp(0, 100, (ev.clientY * 100 / ih) - offY), w: base.w, h: base.h };
         }
@@ -1939,7 +1985,7 @@
         el.removeEventListener("pointercancel", up);
         el.classList.remove("dragging");
         el.style.zIndex = prevZ;
-        if (!dragged) cycleSelectAt(sx, sy);
+        if (!dragged) selectAt(sx, sy);
       };
       el.addEventListener("pointermove", mm);
       el.addEventListener("pointerup", up);
@@ -1952,6 +1998,9 @@
       if (!state.moveMode) return;
       if (e.button !== 0) return;
       e.preventDefault();
+      const dirEl = e.target.closest(".mv-resize");
+      const resize = !!dirEl;
+      const dir = dirEl ? dirEl.dataset.dir : "";
       const pin = currentPins()[idx]; if (!pin) return;
       const pp = pin.pp || {};
       const r = pinEl.getBoundingClientRect();
@@ -1967,7 +2016,18 @@
       const offY = (e.clientY - r.top) * 100 / ih;
       const sx = e.clientX, sy = e.clientY;
       let dragged = false;
-      let lastX = sx, lastY = sy;
+      let lastX = sx, lastY = sy, lastP = null;
+      const MIN = 5;
+      const resizeBox = (d, dW, dH) => {
+        let x = base.x, y = base.y, w = base.w, h = base.h;
+        if (d.includes("e")) w = base.w + dW;
+        if (d.includes("s")) h = base.h + dH;
+        if (d.includes("w")) { x = base.x + dW; w = base.w - dW; }
+        if (d.includes("n")) { y = base.y + dH; h = base.h - dH; }
+        if (w < MIN) { if (d.includes("w")) { w = MIN; x = base.x + base.w - MIN; } else w = MIN; }
+        if (h < MIN) { if (d.includes("n")) { h = MIN; y = base.y + base.h - MIN; } else h = MIN; }
+        return { x: clamp(0, 100, x), y: clamp(0, 100, y), w: clamp(MIN, 120, w), h: clamp(MIN, 120, h) };
+      };
       const paint = (p) => {
         pinEl.style.position = "fixed";
         pinEl.style.left = p.x + "%"; pinEl.style.top = p.y + "%";
@@ -1985,8 +2045,10 @@
         if (!dragged && Math.abs(dx) + Math.abs(dy) < 4) return;
         dragged = true;
         lastX = ev.clientX; lastY = ev.clientY;
+        const dW = (lastX - sx) * 100 / iw, dH = (lastY - sy) * 100 / ih;
+        lastP = resize ? resizeBox(dir, dW, dH) : { x: (lastX * 100 / iw) - offX, y: (lastY * 100 / ih) - offY, w: base.w, h: base.h };
         pinEl.classList.add("dragging");
-        paint({ x: (lastX * 100 / iw) - offX, y: (lastY * 100 / ih) - offY, w: base.w, h: base.h });
+        paint(lastP);
         flipPanelsFromPointer(lastX);
       };
       const up = () => {
@@ -1994,9 +2056,8 @@
         pinEl.removeEventListener("pointerup", up);
         pinEl.removeEventListener("pointercancel", up);
         pinEl.classList.remove("dragging");
-        if (!dragged) commit({ x: sx * 100 / iw - offX, y: sy * 100 / ih - offY, w: base.w, h: base.h });
-        else commit({ x: lastX * 100 / iw - offX, y: lastY * 100 / ih - offY, w: base.w, h: base.h });
-        if (!dragged) cycleSelectAt(sx, sy);
+        if (dragged && lastP) commit(lastP);
+        if (!dragged) selectAt(sx, sy);
       };
       pinEl.addEventListener("pointermove", mm);
       pinEl.addEventListener("pointerup", up);
@@ -2013,7 +2074,8 @@
     if (!on) setPanelSide("right");
     const lp = $("#layerPanel");
     if (lp) { if (on) { renderLayers(); lp.hidden = false; } else lp.hidden = true; }
-    if (!on) clearSel(); else renderMovePanel();
+    if (!on) { clearSel(); const cc = $("#layerChooser"); if (cc) cc.remove(); }
+    else renderMovePanel();
   }
 
   function initMoveLayer() {
@@ -2022,8 +2084,13 @@
     MV_KEYS.forEach((k) => {
       const el = mvElem(k); if (!el) return;
       el.classList.add("mv-el");
-      const h = document.createElement("span"); h.className = "mv-handle"; h.title = "Drag"; el.appendChild(h);
-      const r = document.createElement("span"); r.className = "mv-resize"; r.title = "Resize"; el.appendChild(r);
+      ["n","s","e","w","ne","nw","se","sw"].forEach((d) => {
+        const r = document.createElement("span");
+        r.className = "mv-resize dir-" + d;
+        r.dataset.dir = d;
+        r.title = "Resize";
+        el.appendChild(r);
+      });
       addDragInteractions(el, k);
     });
     $$("#mvSeg button").forEach((b) => b.addEventListener("click", () => { state.moveMode = b.dataset.mv === "on"; saveState(); syncMoveMode(); }));
@@ -2269,6 +2336,10 @@
     document.addEventListener("click", (e) => {
       const lp = $("#layerPanel");
       if (!lp.hidden && !lp.contains(e.target) && !e.target.closest("#btnLayers")) lp.hidden = true;
+    });
+    document.addEventListener("pointerdown", (e) => {
+      const cc = $("#layerChooser");
+      if (cc && !cc.contains(e.target)) cc.remove();
     });
     $("#settingsClose").addEventListener("click", closeSettings);
     $("#settingsBackdrop").addEventListener("click", () => {
