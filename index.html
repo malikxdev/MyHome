@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Home</title>
+  <link rel="stylesheet" href="styles.css?v=1.8.0" />
+</head>
+<body>
+  <svg height="0" width="0" style="position:absolute" aria-hidden="true">
+    <filter id="handDrawnNoise">
+      <feTurbulence result="noise" numOctaves="8" baseFrequency="0.1" type="fractalNoise" />
+      <feDisplacementMap yChannelSelector="G" xChannelSelector="R" scale="3" in2="noise" in="SourceGraphic" />
+    </filter>
+  </svg>
+  <div class="backdrop" id="backdrop"></div>
+  <video class="bg-video" id="bgVideo" muted loop autoplay playsinline></video>
+  <div class="scrim" id="scrim"></div>
+  <div class="noise"></div>
+  <div class="particles" id="particles" data-widget="particles"></div>
+
+  <!-- Gear button (hidden until hover, position configurable) -->
+  <div class="gear-wrap pos-tr" id="gearWrap">
+    <button class="icon-btn" id="btnSettings" title="Settings" aria-label="Open settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 0 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 0 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 0 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 0 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3h.1a1.7 1.7 0 0 0 1-1.6V3a2 2 0 0 1 4 0v.1a1.7 1.7 0 0 0 1 1.6h.1a1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9v.1a1.7 1.7 0 0 0 1.6 1h.1a2 2 0 0 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg>
+    </button>
+  </div>
+
+  <main class="dashboard" id="dashboard">
+
+    <section class="widgets weather-corner" id="weatherWidget" data-widget="weather" style="display:none">
+      <div class="weather-main" id="weatherMain"></div>
+      <div class="weather-alert" id="weatherAlert"></div>
+    </section>
+
+    <section class="center">
+      <div class="center-main">
+        <div class="clock-wrap" id="widgetClock" data-widget="clock">
+          <div class="time" id="time">00:00</div>
+          <div class="date-line" id="dateLine">—</div>
+          <div class="greeting" id="greeting"></div>
+        </div>
+      </div>
+
+      <form class="search-bar" id="searchForm" data-widget="search">
+        <div class="search-box" id="searchBox">
+          <button type="submit" class="search-icon" aria-label="Search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3" class="no-fill"/></svg>
+          </button>
+          <input type="text" id="searchInput" placeholder="Search…" autocomplete="off" spellcheck="false" />
+        </div>
+      </form>
+
+    </section>
+
+    <section class="pin-zone" data-widget="pins">
+      <div class="pin-grid" id="pinGrid"></div>
+    </section>
+
+    <!-- Dock (taskbar style) -->
+    <section class="dock no-scrollbar" id="dock" data-widget="dock"></section>
+
+    <div class="widgets-grid">
+      <section class="widgets" id="focusWidget" data-widget="focus">
+        <article class="widget card focus-card">
+          <div class="widget-head">
+            <span class="widget-title">Focus</span>
+            <svg viewBox="0 0 24 24" class="widget-icon"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div class="timer-display" id="timerDisplay">25:00</div>
+          <div class="timer-controls">
+            <button class="pill-btn" id="timerToggle">Start</button>
+            <button class="pill-btn ghost" id="timerReset">Reset</button>
+          </div>
+          <div class="timer-modes" id="timerModes"></div>
+        </article>
+      </section>
+
+      <section class="widgets todo-corner" id="todoWidget" data-widget="todo">
+        <article class="widget card todo-card">
+          <div class="widget-head">
+            <span class="widget-title">Todo</span>
+          </div>
+          <div class="todo-list" id="todoList"></div>
+          <div class="todo-add">
+            <input type="text" id="todoInput" placeholder="Add a task…" autocomplete="off" spellcheck="false" />
+            <button class="pill-btn ghost" id="todoAddBtn">Add</button>
+          </div>
+        </article>
+      </section>
+    </div>
+
+    <section class="widgets quote-bar" id="quoteWidget" data-widget="quote" style="display:none">
+      <article class="widget card quote-card">
+        <div class="widget-head">
+          <span class="widget-title">Quote</span>
+          <button class="btn-link" id="quoteRefresh" title="New quote">↻</button>
+        </div>
+        <div class="quote-text" id="quoteText"></div>
+        <div class="quote-author" id="quoteAuthor"></div>
+        <div class="quote-actions">
+          <button class="btn-link" id="quoteNext">Next</button>
+          <button class="btn-link" id="quoteSave">Save</button>
+          <button class="btn-link" id="quoteSavedList">Saved (<span id="savedCount">0</span>)</button>
+          <button class="btn-link" id="quoteCopy">Copy</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- ===== Settings panel ===== -->
+  <div class="modal-backdrop" id="settingsBackdrop"></div>
+  <aside class="settings-panel no-scrollbar" id="settingsPanel" role="dialog" aria-modal="true">
+    <div class="settings-head">
+      <span class="settings-brand">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3l9-8z"/></svg>
+        </span>
+        My Home <em class="ver">v1.8.0</em>
+      </span>
+      <span class="settings-head-actions">
+        <button class="icon-btn small" id="settingsAbout" title="About My Home" aria-label="About My Home">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+        </button>
+        <button class="icon-btn" id="settingsClose" title="Close settings" aria-label="Close settings">✕</button>
+      </span>
+    </div>
+
+    <div class="settings-tabs" id="settingsTabs" role="tablist">
+      <button class="settings-tab active" data-tab="appearance" role="tab" aria-selected="true">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>Appearance
+      </button>
+      <button class="settings-tab" data-tab="widgets" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>Widgets
+      </button>
+      <button class="settings-tab" data-tab="pins" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24"><path d="M12 3l6 6-2.5 2.5L12 18l-3.5-6.5L6 9l6-6z"/></svg>Pins
+      </button>
+      <button class="settings-tab" data-tab="search" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>Search
+      </button>
+      <button class="settings-tab" data-tab="advanced" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24"><path d="M4 6h10M14 6h6M4 18h6M10 18h10"/><circle cx="12" cy="6" r="2"/><circle cx="8" cy="18" r="2"/></svg>Advanced
+      </button>
+    </div>
+
+    <div class="settings-tab-panel" id="panel-pins" hidden>
+      <div class="setting-group gpins">
+        <div class="settings-head small-head"><span>Pins & Tabs</span></div>
+        <button class="pill-btn full" id="cfgAddPin">+ Add pin to current tab</button>
+        <button class="pill-btn ghost full" id="btnManageTabs" style="margin-top:8px">Manage tabs & pins…</button>
+        <label class="setting-label inline" style="margin-top:12px">Tile width (columns per row)</label>
+        <div class="bg-sliders">
+          <label>Narrow <input type="range" id="pinColsSlider" min="4" max="20" step="1" value="10" /></label>
+        </div>
+        <div class="setting-hint">More columns = smaller tiles. Tile sizes (1×1 / 2×1 / 1×2 / 2×2) work on any layout.</div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">New Tab behavior</label>
+        <div class="seg" id="singleHomeSeg">
+          <button data-sh="on" class="active">Single Home tab</button>
+          <button data-sh="off">Allow multiple</button>
+        </div>
+        <div class="setting-hint">When on, opening a new tab focuses your existing Home tab instead of duplicating.</div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Bookmarks</label>
+        <button class="pill-btn full" id="importBm">Import from Bookmarks Bar</button>
+        <div class="setting-hint">On first launch your bookmarks are imported automatically. Use the button above to re-import at any time (new pins only, duplicates are skipped).</div>
+      </div>
+    </div>
+
+    <div class="settings-tab-panel" id="panel-search" hidden>
+      <div class="setting-group">
+        <label class="setting-label">Search engine</label>
+        <select class="select-input" id="engineSelect"></select>
+        <button class="pill-btn ghost full" id="btnManageEngines" style="margin-top:8px">Manage engines…</button>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Open results in</label>
+        <div class="seg" id="searchTargetSeg">
+          <button data-t="new" class="active">New tab</button>
+          <button data-t="current">Current tab</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-tab-panel" id="panel-appearance">
+      <div class="setting-group">
+        <label class="setting-label">Wallpaper (auto theme)</label>
+        <div class="theme-grid" id="wallpaperGrid"></div>
+        <button type="button" class="pill-btn ghost full" id="wallShuffle" style="margin-top:10px">🎲 Shuffle wallpaper</button>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Background type</label>
+        <select class="select-input" id="bgTypeSelect">
+          <option value="static">Static (image / default)</option>
+          <option value="live">Live (video)</option>
+        </select>
+        <div class="bg-source" style="margin-top:10px">
+          <button class="pill-btn ghost" id="bgUpload">Upload file</button>
+          <input type="file" id="bgFile" accept="image/*,video/*" hidden />
+          <div class="url-field">
+            <input type="text" id="bgUrl" placeholder="Custom image/video URL (default wallpaper is used otherwise)" />
+            <button class="icon-btn small" id="bgApplyUrl" title="Apply URL">✓</button>
+          </div>
+        </div>
+        <div class="bg-sliders">
+          <label>Blur <input type="range" id="bgBlur" min="0" max="20" step="1" value="0" /></label>
+          <label>Brightness <input type="range" id="bgBright" min="40" max="150" step="5" value="100" /></label>
+          <label>Overlay darken <input type="range" id="bgTint" min="0" max="85" step="1" value="35" /></label>
+        </div>
+        <button class="pill-btn ghost full" id="bgReset">Use default wallpaper</button>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Font</label>
+        <select class="select-input" id="fontSelect"></select>
+        <button class="pill-btn ghost full" id="btnManageFonts" style="margin-top:8px">Manage fonts…</button>
+        <label class="setting-label inline" style="margin-top:12px">Apply to all websites</label>
+        <div class="seg seg-switch" id="fontEverywhereSeg">
+          <button data-fe="on">Enabled</button>
+          <button data-fe="off" class="active">Disabled</button>
+        </div>
+        <div class="setting-hint">When enabled, the selected font is forced on every website (adds all-site access).</div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Clock format</label>
+        <select class="select-input" id="clockFormatSelect"></select>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Date format</label>
+        <select class="select-input" id="dateFormatSelect"></select>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Clock style</label>
+        <select class="select-input" id="clockStyleSelect"></select>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Search bar</label>
+        <select class="select-input" id="searchStyleSelect"></select>
+        <label class="setting-label inline" style="margin-top:12px">Placeholder text</label>
+        <input type="text" class="text-input" id="searchPlaceholder" placeholder="Search…" maxlength="80" />
+        <label class="setting-label inline" style="margin-top:12px">Typed text alignment</label>
+        <div class="seg" id="searchTextAlignSeg">
+          <button data-align="left" class="active">Left</button>
+          <button data-align="center">Center</button>
+          <button data-align="right">Right</button>
+        </div>
+        <div class="bg-sliders">
+          <label>Width <input type="range" id="searchWidth" min="30" max="100" step="5" value="70" /></label>
+          <label>Transparency <input type="range" id="searchTrans" min="0" max="90" step="5" value="55" /></label>
+        </div>
+        <div class="seg" id="searchAlign">
+          <button data-align="left">Left</button>
+          <button data-align="center" class="active">Center</button>
+          <button data-align="right">Right</button>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Homepage density</label>
+        <label class="setting-label inline">Compactness</label>
+        <div class="bg-sliders">
+          <label>Compact <input type="range" id="compactSlider" min="0" max="100" step="5" value="50" /></label>
+        </div>
+        <div class="setting-hint">0 = spacious · 100 = most compact (pins, clock, spacing).</div>
+      </div>
+    </div>
+
+    <div class="settings-tab-panel" id="panel-widgets" hidden>
+      <div class="setting-group">
+        <label class="setting-label">Particles</label>
+        <div class="seg seg-switch" id="particlesSeg">
+          <button data-particles="on" class="active">On</button>
+          <button data-particles="off">Off</button>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Focus timer</label>
+        <div class="seg seg-switch" id="focusSeg">
+          <button data-focus="on">Enabled</button>
+          <button data-focus="off" class="active">Disabled</button>
+        </div>
+        <div class="focus-times" id="focusTimesWrap">
+          <label>Focus <input type="number" id="focusDur" min="1" max="180" /></label>
+          <label>Break <input type="number" id="breakDur" min="1" max="60" /></label>
+          <label>Deep <input type="number" id="deepDur" min="1" max="240" /></label>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Weather</label>
+        <div class="seg seg-switch" id="weatherSeg">
+          <button data-w="on">Enabled</button>
+          <button data-w="off" class="active">Disabled</button>
+        </div>
+        <div class="engine-add-row" style="margin-top:8px">
+          <input type="text" class="text-input" id="weatherCity" placeholder="City (e.g. Multan)" />
+          <button class="pill-btn ghost full" id="weatherSave">Set city</button>
+        </div>
+        <label class="setting-label inline" style="margin-top:10px">Units</label>
+        <div class="seg" id="weatherUnitsSeg">
+          <button data-u="c" class="active">°C</button>
+          <button data-u="f">°F</button>
+        </div>
+        <label class="setting-label inline" style="margin-top:12px">Position</label>
+        <div class="gear-slider-row">
+          <span class="gs-axis">Left</span>
+          <input type="range" id="weatherXSlider" min="0" max="100" step="1" value="2" />
+          <span class="gs-axis">Right</span>
+        </div>
+        <div class="gear-slider-row">
+          <span class="gs-axis">Top</span>
+          <input type="range" id="weatherYSlider" min="0" max="100" step="1" value="6" />
+          <span class="gs-axis">Bottom</span>
+        </div>
+        <label class="setting-label inline" style="margin-top:12px">Size</label>
+        <div class="gear-slider-row">
+          <span class="gs-axis">Width</span>
+          <input type="range" id="weatherWSlider" min="140" max="420" step="10" value="280" />
+          <span class="gs-axis">+</span>
+        </div>
+        <div class="gear-slider-row">
+          <span class="gs-axis">Height</span>
+          <input type="range" id="weatherHSlider" min="80" max="280" step="10" value="140" />
+          <span class="gs-axis">+</span>
+        </div>
+        <div class="setting-hint">Powered by weatherapi.com (free plan). Data is cached for 30 minutes to stay within free call limits.</div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Daily quote</label>
+        <div class="seg seg-switch" id="quoteSeg">
+          <button data-q="on">Enabled</button>
+          <button data-q="off" class="active">Disabled</button>
+        </div>
+        <div class="setting-hint">Random quote from a free public API (dummyjson.com), with an offline fallback.</div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Todo list</label>
+        <div class="seg seg-switch" id="todoSeg">
+          <button data-todo="on">Enabled</button>
+          <button data-todo="off" class="active">Disabled</button>
+        </div>
+        <label class="setting-label inline" style="margin-top:10px">Position</label>
+        <div class="gear-slider-row">
+          <span class="gs-axis">Left</span>
+          <input type="range" id="todoXSlider" min="0" max="100" step="1" value="72" />
+          <span class="gs-axis">Right</span>
+        </div>
+        <div class="gear-slider-row">
+          <span class="gs-axis">Top</span>
+          <input type="range" id="todoYSlider" min="0" max="100" step="1" value="40" />
+          <span class="gs-axis">Bottom</span>
+        </div>
+        <div class="setting-hint">Notebook-style task list (off by default). Move it anywhere with the sliders.</div>
+      </div>
+    </div>
+
+    <div class="settings-tab-panel" id="panel-advanced" hidden>
+      <div class="setting-group">
+        <label class="setting-label">Settings panel</label>
+        <div class="setting-hint">Opens from the right via the gear button; closes when you click outside, press ✕ or Esc.</div>
+        <label class="setting-label inline" style="margin-top:12px">Gear button position</label>
+        <select class="select-input" id="gearPosSelect">
+          <option value="lt">Top Left</option>
+          <option value="rt" selected>Top Right</option>
+          <option value="lb">Bottom Left</option>
+          <option value="rb">Bottom Right</option>
+        </select>
+        <div class="gear-preview" id="gearPreview"></div>
+      </div>
+
+      <div class="setting-group">
+        <label class="setting-label">Configuration</label>
+        <button class="pill-btn ghost full" id="exportCfg">Export config (download)</button>
+        <button class="pill-btn ghost full" id="importCfg" style="margin-top:6px">Import config…</button>
+        <input type="file" id="importCfgFile" accept="application/json,.json" hidden />
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== Pin editor modal ===== -->
+  <div class="modal-backdrop" id="pinBackdrop"></div>
+  <div class="pin-modal no-scrollbar" id="pinModal" role="dialog" aria-modal="true">
+    <div class="settings-head">
+      <span id="pinModalTitle">Add pin</span>
+      <button class="icon-btn" id="pinClose">✕</button>
+    </div>
+    <div class="setting-group">
+      <label class="setting-label">Name</label>
+      <input type="text" class="text-input" id="pinName" placeholder="My link" />
+    </div>
+    <div class="setting-group">
+      <label class="setting-label">URL</label>
+      <input type="text" class="text-input" id="pinUrl" placeholder="https://example.com" />
+    </div>
+    <div class="setting-group">
+      <label class="setting-label">Icon</label>
+      <div class="seg" id="pinIconSeg">
+        <button data-icon="auto" class="active">Auto (favicon)</button>
+        <button data-icon="upload">Upload</button>
+      </div>
+      <input type="file" id="pinIconFile" accept="image/*" hidden />
+    </div>
+    <div class="setting-group">
+      <label class="setting-label">Tile size</label>
+      <div class="seg seg-4" id="pinSizeSeg">
+        <button data-size="1">1×1</button>
+        <button data-size="w">2×1</button>
+        <button data-size="h">1×2</button>
+        <button data-size="b">2×2</button>
+      </div>
+    </div>
+    <div class="setting-group">
+      <label class="setting-label">Tile background</label>
+      <div class="seg" id="pinBgSeg">
+        <button data-bg="upload">Upload</button>
+        <button data-bg="url" class="active">Image URL</button>
+        <button data-bg="video">Video URL</button>
+      </div>
+      <input type="file" id="pinBgFile" accept="image/*" hidden />
+      <input type="text" class="text-input" id="pinBgUrl" placeholder="background image or video URL" style="margin-top:8px" />
+    </div>
+    <div class="pin-modal-actions">
+      <button class="pill-btn" id="pinSave">Save</button>
+      <button class="pill-btn ghost" id="pinDelete" hidden>Delete</button>
+    </div>
+  </div>
+
+  <!-- ===== Generic dialog ===== -->
+  <div class="modal-backdrop" id="dialogBackdrop"></div>
+  <div class="pin-modal no-scrollbar dialog" id="dialogBox" role="dialog" aria-modal="true">
+    <div class="dialog-title" id="dialogTitle"></div>
+    <div class="dialog-msg" id="dialogMsg"></div>
+    <input type="text" class="text-input" id="dialogInput" hidden />
+    <div class="pin-modal-actions dialog-actions" id="dialogActions"></div>
+  </div>
+
+  <!-- ===== Saved quotes modal ===== -->
+  <div class="modal-backdrop" id="savedBackdrop"></div>
+  <div class="pin-modal no-scrollbar" id="savedModal" role="dialog" aria-modal="true">
+    <div class="settings-head">
+      <span>Saved quotes (<span id="savedModalCount">0</span>)</span>
+      <button class="icon-btn" id="savedClose">✕</button>
+    </div>
+    <div class="saved-list" id="savedList"></div>
+    <div class="pin-modal-actions">
+      <button class="pill-btn ghost full" id="savedDownload">Download as JSON</button>
+    </div>
+  </div>
+
+  <!-- ===== Management page (engines / fonts / tabs) ===== -->
+  <div class="modal-backdrop" id="manageBackdrop"></div>
+  <div class="manage-page no-scrollbar" id="managePage" role="dialog" aria-modal="true">
+    <div class="settings-head">
+      <span id="manageTitle">Manage</span>
+      <button class="icon-btn" id="manageClose">✕</button>
+    </div>
+    <div class="seg seg-switch" id="manageTabs">
+      <button data-sec="engines" class="active">Search engines</button>
+      <button data-sec="fonts">Custom fonts</button>
+      <button data-sec="tabs">Tabs & pins</button>
+    </div>
+
+    <div class="manage-section" id="secEngines">
+      <label class="setting-label inline">Your engines — pick a default, rename, edit URL, or delete</label>
+      <div class="tab-manage" id="engineList"></div>
+      <div class="engine-add-row">
+        <input type="text" class="text-input" id="engNewName" placeholder="Engine name (e.g. YouTube)" />
+        <input type="text" class="text-input" id="engNewUrl" placeholder="Search URL with ?q= — bare domain works too (e.g. youtube.com/results?search_query=)" />
+        <button class="pill-btn ghost full" id="engAdd">Add engine</button>
+      </div>
+      <button class="pill-btn ghost full" id="engReset" style="margin-top:10px">Reset to default engines</button>
+    </div>
+
+    <div class="manage-section" id="secFonts" hidden>
+      <label class="setting-label inline">Upload a font file</label>
+      <button class="pill-btn ghost full" id="fontUploadBtn">Upload font file (ttf / otf / woff / woff2)</button>
+      <input type="file" id="fontUploadFile" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" hidden />
+
+      <label class="setting-label inline" style="margin-top:14px">Or add by name + font-family</label>
+      <div class="engine-add-row">
+        <input type="text" class="text-input" id="fontCustomName" placeholder="Font name (e.g. My Font)" />
+        <input type="text" class="text-input" id="fontCustomFamily" placeholder="font-family (e.g. 'My Font', serif)" />
+        <button class="pill-btn ghost full" id="fontCustomSave">Add font</button>
+      </div>
+
+      <label class="setting-label inline" style="margin-top:14px">Your fonts</label>
+      <div class="tab-manage" id="fontList"></div>
+    </div>
+
+    <div class="manage-section" id="secTabs" hidden>
+      <label class="setting-label inline">Tabs</label>
+      <div class="tab-manage" id="tabList"></div>
+      <div class="tab-add-row">
+        <input type="text" class="text-input" id="mtTabName" placeholder="New tab name" />
+        <button class="pill-btn" id="mtAddTab">Add</button>
+      </div>
+      <label class="setting-label inline" style="margin-top:16px">Pins in selected tab</label>
+      <select class="select-input" id="pinsTabSel"></select>
+      <div class="tab-manage" id="pinsList" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <!-- ===== Right-click widget config menu ===== -->
+  <div class="widget-menu" id="widgetMenu" hidden></div>
+
+  <!-- ===== About page ===== -->
+  <div class="about-page" id="aboutPage" role="dialog" aria-modal="true">
+    <button class="about-close-x" id="aboutCloseX" aria-label="Close">✕</button>
+    <div class="about-card">
+      <div class="about-hero">
+        <span class="brand-mark about-mark"><svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3l9-8z"/></svg></span>
+        <h1>My Home</h1>
+        <span class="about-version">v1.8.0</span>
+        <p class="about-desc">A clean, fully customizable new-tab start page.</p>
+      </div>
+
+      <div class="about-features">
+        <div class="about-feature"><strong>Pins & tabs</strong><span>Custom grid, icons, sizes, tabs & bookmarks.</span></div>
+        <div class="about-feature"><strong>Search</strong><span>25 bar styles, configurable engines.</span></div>
+        <div class="about-feature"><strong>Themes & widgets</strong><span>Wallpapers, fonts, clock, weather, quote, todo, focus.</span></div>
+        <div class="about-feature"><strong>Local-first</strong><span>Everything stays on your machine.</span></div>
+      </div>
+
+      <div class="about-shortcuts">
+        <h3>Keyboard shortcuts</h3>
+        <div class="about-ks"><code>/</code><span>focus search</span></div>
+        <div class="about-ks"><code>Alt+N</code><span>add pin</span></div>
+        <div class="about-ks"><code>Alt+T</code><span>add tab</span></div>
+        <div class="about-ks"><code>Ctrl+,</code><span>settings</span></div>
+        <div class="about-ks"><code>Esc</code><span>close</span></div>
+        <div class="about-ks"><code>Ctrl+Shift+/</code><span>about</span></div>
+      </div>
+
+      <div class="about-credits">Made by <strong>MalikxDev</strong> 🔥 · Vibe Devs · MIT License</div>
+
+      <div class="about-links">
+        <a href="https://github.com/malikxdev/MyHome" target="_blank" rel="noopener">GitHub</a>
+        <a href="#" target="_blank" rel="noopener">Website</a>
+        <a href="#" target="_blank" rel="noopener">Support</a>
+        <a href="https://github.com/malikxdev/MyHome/issues" target="_blank" rel="noopener">Report Issue</a>
+      </div>
+
+      <div class="about-privacy">Privacy: all data stays local. The only network requests are favicons, media you add, and the default wallpaper.</div>
+
+      <button class="pill-btn ghost about-replay-btn" id="aboutTutorial">Replay intro tour</button>
+      <button class="pill-btn about-close-btn" id="aboutClose">Close</button>
+    </div>
+  </div>
+
+  <!-- ===== Floating Info button (bottom-right) ===== -->
+  <button class="info-fab" id="infoFab" title="About" aria-label="About">ℹ</button>
+
+  <!-- ===== First-run tutorial ===== -->
+  <div class="tutorial" id="tutorial" role="dialog" aria-modal="true" hidden>
+    <div class="tutorial-card">
+      <button class="about-close-x" id="tutorialClose" aria-label="Skip tutorial">✕</button>
+      <div class="tutorial-body" id="tutorialBody"></div>
+      <div class="tutorial-nav">
+        <button class="pill-btn ghost" id="tutorialPrev">‹ Back</button>
+        <div class="tutorial-dots" id="tutorialDots"></div>
+        <button class="pill-btn" id="tutorialNext">Next ›</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=1.8.0"></script>
+</body>
+</html>
