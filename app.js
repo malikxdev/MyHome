@@ -19,40 +19,7 @@
 
   const DEFAULT_WALL_IMAGE = "https://mcdn.wallpapersafari.com/medium/84/32/UvDeM2.jpg";
 
-  const WALLPAPERS = [
-    { id: "midnight", name: "Midnight", dark: true, bg1: "#0b0e1a", bg2: "#131a2f", accent: "#7c5cff", accent2: "#22d3ee", accent3: "#f43f5e", glow: "rgba(124,92,255,.45)", css: "linear-gradient(160deg, #0b0e1a, #131a2f)" },
-    { id: "sakura", name: "Sakura", dark: true, bg1: "#2a0f22", bg2: "#4a1f3d", accent: "#ff7ab8", accent2: "#ffd166", accent3: "#ff5d8f", glow: "rgba(255,122,184,.4)", css: "linear-gradient(160deg, #2a0f22, #4a1f3d)" },
-    { id: "synthwave", name: "Synthwave", dark: true, bg1: "#0b0720", bg2: "#2a0a4a", accent: "#ff2d95", accent2: "#00f0ff", accent3: "#ffe45e", glow: "rgba(255,45,149,.45)", css: "linear-gradient(160deg, #0b0720, #2a0a4a)" },
-    { id: "forest", name: "Forest", dark: true, bg1: "#07120f", bg2: "#10281f", accent: "#34d399", accent2: "#a3e635", accent3: "#2dd4bf", glow: "rgba(52,211,153,.4)", css: "linear-gradient(160deg, #07120f, #10281f)" },
-    { id: "ocean", name: "Ocean", dark: true, bg1: "#071a2e", bg2: "#0d3a5c", accent: "#38bdf8", accent2: "#a5f3fc", accent3: "#60a5fa", glow: "rgba(56,189,248,.4)", css: "linear-gradient(160deg, #071a2e, #0d3a5c)" },
-    { id: "sunset", name: "Sunset", dark: true, bg1: "#2b0e18", bg2: "#57223a", accent: "#f97316", accent2: "#fbbf24", accent3: "#fb7185", glow: "rgba(249,115,22,.45)", css: "linear-gradient(160deg, #2b0e18, #57223a)" },
-    { id: "ghibli", name: "Ghibli", dark: true, bg1: "#0c2433", bg2: "#1d4a5c", accent: "#6ee7b7", accent2: "#fcd34d", accent3: "#93c5fd", glow: "rgba(110,231,183,.4)", css: "linear-gradient(160deg, #0c2433, #1d4a5c)" },
-    { id: "neon", name: "Neon", dark: true, bg1: "#12081f", bg2: "#241040", accent: "#c026d3", accent2: "#f472b6", accent3: "#a78bfa", glow: "rgba(192,38,211,.45)", css: "linear-gradient(160deg, #12081f, #241040)" },
-    { id: "paper", name: "Paper", dark: false, bg1: "#e9e4d8", bg2: "#d8d0c0", accent: "#8a6d3b", accent2: "#a84040", accent3: "#3b6d8a", glow: "rgba(138,109,59,.25)", css: "linear-gradient(160deg, #e9e4d8, #d8d0c0)" },
-    { id: "mono", name: "Mono", dark: true, bg1: "#151515", bg2: "#2b2b2b", accent: "#ffffff", accent2: "#aaaaaa", accent3: "#666666", glow: "rgba(255,255,255,.25)", css: "linear-gradient(160deg, #151515, #2b2b2b)" },
-    { id: "lavender", name: "Lavender", dark: true, bg1: "#1b1429", bg2: "#3b2a55", accent: "#b39ddb", accent2: "#f48fb1", accent3: "#81d4fa", glow: "rgba(179,157,219,.4)", css: "linear-gradient(160deg, #1b1429, #3b2a55)" },
-    { id: "candy", name: "Candy", dark: false, bg1: "#ffe8ec", bg2: "#ffd3e0", accent: "#d81b60", accent2: "#7b1fa2", accent3: "#0288d1", glow: "rgba(216,27,96,.22)", css: "linear-gradient(160deg, #ffe8ec, #ffd3e0)" },
-    { id: "aurora", name: "Aurora", dark: true, bg1: "#062c1c", bg2: "#0b4f3a", accent: "#34d399", accent2: "#a7f3d0", accent3: "#5eead4", glow: "rgba(52,211,153,.4)", css: "linear-gradient(160deg, #062c1c, #0b4f3a)" },
-    { id: "ember", name: "Ember", dark: true, bg1: "#1c0a05", bg2: "#4a1508", accent: "#fb923c", accent2: "#fde68a", accent3: "#ef4444", glow: "rgba(251,146,60,.4)", css: "linear-gradient(160deg, #1c0a05, #4a1508)" },
-    { id: "deepsea", name: "Deep Sea", dark: true, bg1: "#03121f", bg2: "#074a5e", accent: "#2dd4bf", accent2: "#67e8f9", accent3: "#0891b2", glow: "rgba(45,212,191,.4)", css: "linear-gradient(160deg, #03121f, #074a5e)" },
-    { id: "nightcity", name: "Night City", dark: true, bg1: "#0a0a14", bg2: "#1c1440", accent: "#f0abfc", accent2: "#67e8f9", accent3: "#f472b6", glow: "rgba(240,171,252,.4)", css: "linear-gradient(160deg, #0a0a14, #1c1440)" },
-    { id: "candyland", name: "Candyland", dark: false, bg1: "#fdf2f8", bg2: "#fbcfe8", accent: "#ec4899", accent2: "#8b5cf6", accent3: "#f59e0b", glow: "rgba(236,72,153,.22)", css: "linear-gradient(160deg, #fdf2f8, #fbcfe8)" },
-    { id: "grape", name: "Grape", dark: true, bg1: "#170b2e", bg2: "#3b1570", accent: "#c084fc", accent2: "#a78bfa", accent3: "#f0abfc", glow: "rgba(192,132,252,.42)", css: "linear-gradient(160deg, #170b2e, #3b1570)" },
-    { id: "goldhour", name: "Golden Hour", dark: true, bg1: "#241404", bg2: "#5c3208", accent: "#fbbf24", accent2: "#fde68a", accent3: "#f97316", glow: "rgba(251,191,36,.45)", css: "linear-gradient(160deg, #241404, #5c3208)" },
-    { id: "teal", name: "Teal", dark: true, bg1: "#04211d", bg2: "#0f5549", accent: "#2dd4bf", accent2: "#99f6e4", accent3: "#14b8a6", glow: "rgba(45,212,191,.4)", css: "linear-gradient(160deg, #04211d, #0f5549)" },
-    { id: "crimson", name: "Crimson", dark: true, bg1: "#20060c", bg2: "#5a1026", accent: "#f43f5e", accent2: "#fda4af", accent3: "#e11d48", glow: "rgba(244,63,94,.42)", css: "linear-gradient(160deg, #20060c, #5a1026)" },
-    { id: "slate", name: "Slate", dark: true, bg1: "#0f172a", bg2: "#1e293b", accent: "#93c5fd", accent2: "#cbd5e1", accent3: "#64748b", glow: "rgba(147,197,253,.35)", css: "linear-gradient(160deg, #0f172a, #1e293b)" },
-    { id: "plum", name: "Plum", dark: true, bg1: "#2a0e1f", bg2: "#5a1e45", accent: "#f472b6", accent2: "#fbcfe8", accent3: "#a21caf", glow: "rgba(244,114,182,.4)", css: "linear-gradient(160deg, #2a0e1f, #5a1e45)" },
-    { id: "peach", name: "Peach", dark: false, bg1: "#fff7ed", bg2: "#fed7aa", accent: "#ea580c", accent2: "#f97316", accent3: "#f59e0b", glow: "rgba(234,88,12,.22)", css: "linear-gradient(160deg, #fff7ed, #fed7aa)" },
-    { id: "arctic", name: "Arctic", dark: true, bg1: "#0b1d2e", bg2: "#17405f", accent: "#7dd3fc", accent2: "#e0f2fe", accent3: "#38bdf8", glow: "rgba(125,211,252,.4)", css: "linear-gradient(160deg, #0b1d2e, #17405f)" },
-    { id: "rainforest", name: "Rainforest", dark: true, bg1: "#06180f", bg2: "#124229", accent: "#4ade80", accent2: "#bbf7d0", accent3: "#22c55e", glow: "rgba(74,222,128,.4)", css: "linear-gradient(160deg, #06180f, #124229)" },
-    { id: "sunset2", name: "Sunset II", dark: true, bg1: "#2b0a1a", bg2: "#6a1b3d", accent: "#fb7185", accent2: "#fbbf24", accent3: "#f97316", glow: "rgba(251,113,133,.42)", css: "linear-gradient(160deg, #2b0a1a, #6a1b3d)" },
-    { id: "cyber", name: "Cyberpunk", dark: true, bg1: "#0d0a1e", bg2: "#2a0a54", accent: "#22d3ee", accent2: "#f0abfc", accent3: "#a3e635", glow: "rgba(34,211,238,.45)", css: "linear-gradient(160deg, #0d0a1e, #2a0a54)" },
-    { id: "biscuit", name: "Biscuit", dark: false, bg1: "#f5efe6", bg2: "#e7d8c3", accent: "#9a6b3f", accent2: "#b08968", accent3: "#6b4f2f", glow: "rgba(154,107,63,.25)", css: "linear-gradient(160deg, #f5efe6, #e7d8c3)" },
-    { id: "wine", name: "Wine", dark: true, bg1: "#1c0a10", bg2: "#4a1227", accent: "#fda4af", accent2: "#e11d48", accent3: "#be123c", glow: "rgba(253,164,175,.38)", css: "linear-gradient(160deg, #1c0a10, #4a1227)" },
-    { id: "lagoon", name: "Lagoon", dark: true, bg1: "#052e36", bg2: "#0e5f6b", accent: "#5eead4", accent2: "#a5f3fc", accent3: "#2dd4bf", glow: "rgba(94,234,212,.4)", css: "linear-gradient(160deg, #052e36, #0e5f6b)" },
-    { id: "rose", name: "Rose", dark: false, bg1: "#fff1f2", bg2: "#fecdd3", accent: "#f43f5e", accent2: "#fb7185", accent3: "#9f1239", glow: "rgba(244,63,94,.22)", css: "linear-gradient(160deg, #fff1f2, #fecdd3)" },
-  ];
+  const DEFAULT_THEME = { bg1: "#0b0e1a", bg2: "#131a2f", accent: "#7c5cff", accent2: "#22d3ee", accent3: "#f43f5e", dark: true };
 
   const CLOCK_STYLES = [
     { id: "classic", label: "Classic" },
@@ -170,7 +137,7 @@
     clockStyle: "glow",
     font: "round",
     customFonts: [],
-    wallpaperId: "midnight",
+    theme: { ...DEFAULT_THEME },
     customBg: { image: null, url: DEFAULT_WALL_IMAGE, video: null, type: "static" },
     sliders: { blur: 0, bright: 100, tint: 30 },
     particles: false,
@@ -179,6 +146,7 @@
     singleHome: true,
     focusEnabled: false,
     focusTimes: { focus: 25, br: 5, deep: 50 },
+    timerFormat: "ms",
     tabs: [{ id: "main", name: "My Home", pins: [] }],
     activeTab: 0,
     panelPos: "right",
@@ -221,9 +189,10 @@
     weatherW: 280,
     weatherH: 140,
     settingsTab: "appearance",
+    layout: {},
   };
 
-  const timer = { min: 25, running: false, remaining: 25 * 60, interval: null };
+  const timer = { min: 25, running: false, remaining: 25 * 60 * 1000, interval: null };
   let settingsOpenedAt = 0;
 
   const $ = (s) => document.querySelector(s);
@@ -237,12 +206,14 @@
   // synchronously on every one is wasteful. Writes are coalesced over ~120ms
   // and flushed on page unload so nothing is lost on close.
   let _saveTimer = null;
+  let _suppressFlush = false;
   function saveState() {
     if (_saveTimer) clearTimeout(_saveTimer);
     _saveTimer = setTimeout(flushState, 120);
   }
   function flushState() {
     _saveTimer = null;
+    if (_suppressFlush) return;
     try {
       const json = JSON.stringify(state);
       try {
@@ -278,6 +249,11 @@
     if (typeof state.activeTab !== "number" || !state.tabs[state.activeTab]) state.activeTab = 0;
     state.tabs.forEach((t) => { if (!Array.isArray(t.pins)) t.pins = []; });
     if (!state.sliders) state.sliders = { blur: 0, bright: 100, tint: 30 };
+    if (!state.theme || typeof state.theme !== "object") state.theme = { ...DEFAULT_THEME };
+    for (const k of ["bg1", "bg2", "accent", "accent2", "accent3"]) {
+      if (typeof state.theme[k] !== "string" || !state.theme[k]) state.theme[k] = DEFAULT_THEME[k];
+    }
+    if (typeof state.theme.dark !== "boolean") state.theme.dark = DEFAULT_THEME.dark;
     if (!Array.isArray(state.customFonts)) state.customFonts = [];
     const DEFAULT_WIDGETS = {
       clock: { visible: true, opacity: 100 }, search: { visible: true, opacity: 100 },
@@ -334,6 +310,8 @@
     if (typeof state.weatherH !== "number") state.weatherH = 140;
     state.weatherW = clamp(140, 420, state.weatherW);
     state.weatherH = clamp(80, 280, state.weatherH);
+    if (!state.layout || typeof state.layout !== "object") state.layout = {};
+    state.moveMode = false;
     if (!Array.isArray(state.savedQuotes)) state.savedQuotes = [];
     if (!["appearance", "widgets", "pins", "search", "advanced"].includes(state.settingsTab)) state.settingsTab = "appearance";
   }
@@ -415,16 +393,21 @@
   }
 
   /* ---------- Visuals ---------- */
+  function hexToRgba(hex, a) {
+    const m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!m) return `rgba(124,92,255,${a})`;
+    return `rgba(${parseInt(m[1],16)},${parseInt(m[2],16)},${parseInt(m[3],16)},${a})`;
+  }
   function applyVisuals() {
-    const wp = WALLPAPERS.find((x) => x.id === state.wallpaperId) || WALLPAPERS[0];
+    const t = state.theme || DEFAULT_THEME;
     const r = document.documentElement.style;
-    r.setProperty("--text", wp.dark ? "#eef2ff" : "#2a2a2a");
-    r.setProperty("--text-dim", wp.dark ? "#aab3d0" : "#6a6460");
-    r.setProperty("--accent", wp.accent);
-    r.setProperty("--accent2", wp.accent2);
-    r.setProperty("--accent3", wp.accent3);
-    r.setProperty("--glow", wp.glow);
-    r.setProperty("--scrim", wp.dark ? "linear-gradient(to bottom, rgba(5,7,15,.40), rgba(5,7,15,.62))" : "linear-gradient(to bottom, rgba(255,255,255,.18), rgba(255,255,255,.34))");
+    r.setProperty("--text", t.dark ? "#eef2ff" : "#2a2a2a");
+    r.setProperty("--text-dim", t.dark ? "#aab3d0" : "#6a6460");
+    r.setProperty("--accent", t.accent);
+    r.setProperty("--accent2", t.accent2);
+    r.setProperty("--accent3", t.accent3);
+    r.setProperty("--glow", hexToRgba(t.accent, .45));
+    r.setProperty("--scrim", t.dark ? "linear-gradient(to bottom, rgba(5,7,15,.40), rgba(5,7,15,.62))" : "linear-gradient(to bottom, rgba(255,255,255,.18), rgba(255,255,255,.34))");
 
     const blur = state.sliders.blur || 0;
     const bright = state.sliders.bright || 100;
@@ -454,37 +437,43 @@
       vid.style.display = "none";
       if (hasCustom) {
         // Layer the custom image on top of the theme gradient: if the image
-        // fails to load, the built-in default wallpaper still shows.
-        bd.style.backgroundImage = `url('${state.customBg.image || state.customBg.url}'), ${wp.css}`;
+        // fails to load, the built-in default gradient still shows.
+        bd.style.backgroundImage = `url('${state.customBg.image || state.customBg.url}'), linear-gradient(160deg, ${t.bg1}, ${t.bg2})`;
       } else {
-        bd.style.backgroundImage = wp.css;
+        bd.style.backgroundImage = `linear-gradient(160deg, ${t.bg1}, ${t.bg2})`;
       }
       bd.style.filter = filter;
     }
   }
 
-  function renderWallpaperGrid() {
-    const grid = $("#wallpaperGrid");
-    grid.innerHTML = "";
-    for (const w of WALLPAPERS) {
-      const el = document.createElement("button");
-      el.className = "theme-swatch" + (w.id === state.wallpaperId ? " active" : "");
-      el.title = w.name;
-      el.setAttribute("aria-pressed", String(w.id === state.wallpaperId));
-      el.style.background = w.css;
-      el.dataset.id = w.id;
-      el.addEventListener("click", () => { state.wallpaperId = w.id; saveState(); renderWallpaperGrid(); applyVisuals(); });
-      grid.appendChild(el);
+  /* ---------- Custom theme controls ---------- */
+  function renderThemeControls() {
+    const k = ["bg1", "bg2", "accent", "accent2", "accent3"];
+    for (const key of k) {
+      const el = $("#theme" + key[0].toUpperCase() + key.slice(1));
+      if (el) el.value = state.theme[key];
     }
+    $$("#themeDarkSeg button").forEach((b) => b.classList.toggle("active", (b.dataset.dark === "on") === !!state.theme.dark));
   }
 
-  // Pick a random wallpaper different from the current one and apply it.
-  function shuffleWallpaper() {
-    const pool = WALLPAPERS.filter((w) => w.id !== state.wallpaperId);
-    if (!pool.length) return;
-    const pick = pool[Math.floor(Math.random() * pool.length)];
-    state.wallpaperId = pick.id;
-    saveState(); renderWallpaperGrid(); applyVisuals();
+  function applyThemeColor(key, value) {
+    state.theme[key] = value;
+    saveState(); applyVisuals();
+  }
+
+  // Build a fresh random palette and apply it immediately.
+  function randomTheme() {
+    const rnd = () => `hsl(${Math.floor(Math.random() * 360)}, ${55 + Math.floor(Math.random() * 40)}%, ${45 + Math.floor(Math.random() * 35)}%)`;
+    const base = Math.floor(Math.random() * 360);
+    const sat = 30 + Math.floor(Math.random() * 40);
+    const li = 10 + Math.floor(Math.random() * 20);
+    state.theme.bg1 = `hsl(${base}, ${sat}%, ${li}%)`;
+    state.theme.bg2 = `hsl(${(base + 20) % 360}, ${sat}%, ${li + 8}%)`;
+    state.theme.accent = rnd();
+    state.theme.accent2 = rnd();
+    state.theme.accent3 = rnd();
+    state.theme.dark = true;
+    saveState(); renderThemeControls(); applyVisuals();
   }
 
   /* ---------- Selects / grids ---------- */
@@ -930,7 +919,18 @@
       a.href = pin.url;
       a.target = "_blank";
       a.rel = "noopener";
-      a.draggable = true;
+      a.draggable = !state.moveMode;
+      if (pin.pp) {
+        a.style.position = "fixed";
+        a.style.left = pin.pp.x + "%";
+        a.style.top = pin.pp.y + "%";
+        a.style.width = pin.pp.w + "%";
+        a.style.height = pin.pp.h + "%";
+        a.style.zIndex = pin.pp.z || "12";
+      }
+      a.addEventListener("click", (e) => { if (state.moveMode) e.preventDefault(); });
+      if (selPin === idx) a.classList.add("sel");
+      addPinDragInteractions(a, idx);
 
       let iconHtml = "";
       if (pin.icon) iconHtml = `<img src="${pin.icon}" alt="" />`;
@@ -1132,28 +1132,50 @@
   }
 
   /* ---------- Focus timer ---------- */
-  function fmt(sec) { const m = Math.floor(sec / 60); const s = sec % 60; return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`; }
+  const TIMER_FORMATS = [
+    { id: "ms", label: "mm:ss.mmm" },
+    { id: "s", label: "mm:ss" },
+    { id: "hms", label: "h:mm:ss" },
+  ];
+  function fmtMs(ms) {
+    const f = TIMER_FORMATS.find((x) => x.id === state.timerFormat) || TIMER_FORMATS[0];
+    const total = Math.max(0, ms);
+    const h = Math.floor(total / 3600000);
+    const m = Math.floor((total % 3600000) / 60000);
+    const s = Math.floor((total % 60000) / 1000);
+    const mm = Math.floor(total % 1000);
+    const p = (n, l = 2) => String(n).padStart(l, "0");
+    if (f.id === "hms") return `${h}:${p(m)}:${p(s)}`;
+    if (f.id === "ms") return `${p(m)}:${p(s)}.${p(mm, 3)}`;
+    return `${p(m)}:${p(s)}`;
+  }
   function renderTimer() {
-    $("#timerDisplay").textContent = fmt(timer.remaining);
+    $("#timerDisplay").textContent = fmtMs(timer.remaining);
     $("#timerToggle").textContent = timer.running ? "Pause" : "Start";
     $$(".mode").forEach((m) => m.classList.toggle("active", Number(m.dataset.min) === timer.min));
   }
   function stopTimerInterval() { if (timer.interval) { clearInterval(timer.interval); timer.interval = null; } }
-  function setTimerMin(min) { timer.min = min; timer.remaining = min * 60; timer.running = false; stopTimerInterval(); renderTimer(); }
+  function setTimerMin(min) { timer.min = min; timer.remaining = min * 60 * 1000; timer.running = false; stopTimerInterval(); renderTimer(); }
+  let timerStartAt = 0, timerBase = 0;
+  function timerTick() {
+    timer.remaining = Math.max(0, timerBase - (Date.now() - timerStartAt));
+    if (timer.remaining <= 0) {
+      stopTimerInterval(); timer.running = false;
+      try { new Notification("Focus", { body: "Time's up — take a break." }); } catch (e) {}
+    }
+    renderTimer();
+  }
   function toggleTimer() {
-    if (timer.running) { timer.running = false; stopTimerInterval(); }
-    else {
-      if (timer.remaining <= 0) timer.remaining = timer.min * 60;
+    if (timer.running) {
+      timer.remaining = Math.max(0, timerBase - (Date.now() - timerStartAt));
+      timer.running = false; stopTimerInterval();
+    } else {
+      if (timer.remaining <= 0) timer.remaining = timer.min * 60 * 1000;
       if (typeof Notification !== "undefined" && Notification.requestPermission) Notification.requestPermission().catch(() => {});
+      timerBase = timer.remaining;
+      timerStartAt = Date.now();
       timer.running = true;
-      timer.interval = setInterval(() => {
-        timer.remaining--;
-        if (timer.remaining <= 0) {
-          timer.remaining = 0; stopTimerInterval(); timer.running = false;
-          try { new Notification("Focus", { body: "Time's up — take a break." }); } catch (e) {}
-        }
-        renderTimer();
-      }, 1000);
+      timer.interval = setInterval(timerTick, 33);
     }
     renderTimer();
   }
@@ -1524,11 +1546,14 @@
   /* ---------- Settings ---------- */
   function renderSettings() {
     decorateHeaderIcons();
-    renderWallpaperGrid();
+    renderThemeControls();
     renderSelects();
     renderTimerModes();
     applyFocusVisibility();
+    const tf = $("#timerFormatSelect");
+    if (tf) tf.value = state.timerFormat || "ms";
 
+    $$("#mvSeg button").forEach((b) => b.classList.toggle("active", (b.dataset.mv === "on") === !!state.moveMode));
     $$("#particlesSeg button").forEach((b) => b.classList.toggle("active", (b.dataset.particles === "on") === state.particles));
     $$("#focusSeg button").forEach((b) => b.classList.toggle("active", (b.dataset.focus === "on") === state.focusEnabled));
     $("#bgTypeSelect").value = state.customBg.type || "static";
@@ -1624,6 +1649,424 @@
     w.style.top = y + "px";
   }
 
+  /* ---------- Move mode & free layout ---------- */
+  const MV_KEYS = ["clock", "search", "pins", "dock", "focus", "weather", "quote", "todo"];
+  const MV_ELEM = {
+    clock: "#widgetClock", search: "#searchForm", pins: "#pinZone", dock: "#dock",
+    focus: "#focusWidget", weather: "#weatherWidget", quote: "#quoteWidget", todo: "#todoWidget"
+  };
+  function mvElem(k) { return document.querySelector(MV_ELEM[k]); }
+
+  function mvGetPos(k) {
+    if (k === "weather") {
+      return { x: state.weatherX, y: state.weatherY, w: Math.round(state.weatherW * 100 / innerWidth), h: Math.round(state.weatherH * 100 / innerHeight) };
+    }
+    if (k === "todo") return { x: state.todoX, y: state.todoY, w: 0, h: 0 };
+    return state.layout[k] || null;
+  }
+
+  function mvSetPos(k, p) {
+    if (k === "weather") {
+      state.weatherX = clamp(0, 100, Math.round(p.x));
+      state.weatherY = clamp(0, 100, Math.round(p.y));
+      state.weatherW = clamp(140, 420, Math.round(p.w * innerWidth / 100));
+      state.weatherH = clamp(80, 280, Math.round(p.h * innerHeight / 100));
+      saveState(); applyWeatherPos();
+    } else if (k === "todo") {
+      state.todoX = clamp(0, 100, Math.round(p.x));
+      state.todoY = clamp(0, 100, Math.round(p.y));
+      saveState(); applyTodoPos();
+    } else {
+      state.layout[k] = p;
+      saveState(); applyLayout();
+    }
+  }
+
+  function mvClearPos(k) {
+    if (k === "weather") { state.weatherX = 2; state.weatherY = 6; state.weatherW = 280; state.weatherH = 140; saveState(); applyWeatherPos(); }
+    else if (k === "todo") { state.todoX = 72; state.todoY = 40; saveState(); applyTodoPos(); }
+    else {
+      const el = mvElem(k); if (el) { el.style.position = ""; el.style.left = ""; el.style.top = ""; el.style.width = ""; el.style.height = ""; el.style.zIndex = ""; }
+      delete state.layout[k]; saveState(); applyLayout();
+    }
+  }
+
+  function applyLayout() {
+    if (innerWidth <= 760) return;
+    MV_KEYS.forEach((k) => {
+      if (k === "weather" || k === "todo") return;
+      const el = mvElem(k); if (!el) return;
+      const p = state.layout[k];
+      if (!p) return;
+      el.style.position = "fixed";
+      el.style.left = p.x + "%"; el.style.top = p.y + "%";
+      el.style.width = p.w + "%"; el.style.height = p.h + "%";
+      el.style.zIndex = p.z || 8;
+    });
+  }
+
+  let selKey = null;
+  let selPin = null;
+
+  function clearSel() {
+    selKey = null; selPin = null;
+    $$(".mv-el.sel, .pin-cell.sel").forEach((el) => el.classList.remove("sel"));
+    $("#movePanel").hidden = true;
+  }
+
+  function selectEl(k) {
+    selKey = k; selPin = null;
+    $$(".mv-el.sel, .pin-cell.sel").forEach((el) => el.classList.remove("sel"));
+    const el = mvElem(k); if (el) el.classList.add("sel");
+    renderMovePanel();
+  }
+
+  function selectPin(idx, pinEl) {
+    selPin = idx; selKey = "pins";
+    $$(".mv-el.sel, .pin-cell.sel").forEach((el) => el.classList.remove("sel"));
+    if (pinEl) pinEl.classList.add("sel");
+    renderMovePanel();
+  }
+
+  /* ---------- Layers panel ---------- */
+  function bringToFront(k) {
+    if (k === "pins") return;
+    const p = state.layout[k] || {};
+    p.z = 99;
+    state.layout[k] = p;
+    saveState(); applyLayout();
+  }
+  function renderLayers() {
+    const list = $("#layerList");
+    list.innerHTML = "";
+    const add = (kind, label, onClick, active) => {
+      const b = document.createElement("button");
+      b.className = "layer-item" + (active ? " active" : "");
+      b.innerHTML = `<span class="mp-kind">${kind}</span><span class="layer-name">${esc(label)}</span>`;
+      b.addEventListener("click", onClick);
+      list.appendChild(b);
+    };
+    MV_KEYS.forEach((k) => {
+      const meta = WIDGET_META[k];
+      add("Component", (meta && meta.label) || k, () => {
+        bringToFront(k);
+        selectEl(k);
+        $("#layerPanel").hidden = true;
+      }, selKey === k && selPin === null);
+    });
+    currentPins().forEach((pin, idx) => {
+      add("Pin", pin.name || pin.url, () => {
+        if (pin.pp) { pin.pp.z = 99; saveState(); }
+        else { pin.pp = { x: 50, y: 50, w: 10, h: 10, z: 99 }; saveState(); renderPins(); }
+        selectPin(idx, null);
+        $("#layerPanel").hidden = true;
+      }, selPin === idx);
+    });
+  }
+  function openLayers() {
+    renderLayers();
+    $("#layerPanel").hidden = false;
+  }
+
+  function setRangeTrio(id, v) { const el = document.getElementById(id); const out = document.getElementById(id + "v"); if (el) el.value = clamp(0, 120, +v || 0); if (out) out.textContent = Math.round(clamp(0, 120, +v || 0)); }
+
+  function renderMovePanel() {
+    const panel = $("#movePanel");
+    if (!state.moveMode || (selKey === null && selPin === null)) { panel.hidden = true; return; }
+    panel.hidden = false;
+    const k = selKey !== null ? selKey : "pins";
+    const pins = currentPins();
+    $("#mpKind").textContent = selPin !== null ? "Pin" : "Component";
+    $("#mpTitle").textContent = selPin !== null
+      ? ((pins[selPin] && (pins[selPin].name || pins[selPin].url)) || "Pin")
+      : ((WIDGET_META[k] && WIDGET_META[k].label) || k);
+    const hideSize = (k === "todo") && selPin === null;
+    ["mpW", "mpH"].forEach((id) => { const lbl = document.getElementById(id).closest("label"); if (lbl) lbl.style.display = hideSize ? "none" : ""; });
+    if (selPin !== null) {
+      const pin = pins[selPin];
+      const pp = (pin && pin.pp) || { x: 0, y: 0, w: 0, h: 0 };
+      setRangeTrio("mpX", pp.x); setRangeTrio("mpY", pp.y); setRangeTrio("mpW", pp.w); setRangeTrio("mpH", pp.h);
+    } else {
+      const p = mvGetPos(k) || { x: 50, y: 50, w: 30, h: 30 };
+      setRangeTrio("mpX", p.x); setRangeTrio("mpY", p.y); setRangeTrio("mpW", p.w); setRangeTrio("mpH", p.h);
+    }
+    const w = currentWidget(k);
+    $("#mpOp").value = w.opacity;
+    $("#mpOpv").textContent = w.opacity;
+    $("#mpBg").value = w.bg == null ? 55 : w.bg;
+    $("#mpBgv").textContent = w.bg == null ? 55 : w.bg;
+    $("#mpVis").checked = w.visible;
+  }
+
+  function bindMovePanel() {
+    const panel = $("#movePanel"); if (!panel || panel.dataset.bound) return;
+    panel.dataset.bound = "1";
+    const commit = () => {
+      if (selPin !== null) {
+        const pin = currentPins()[selPin]; if (!pin) return;
+        pin.pp = { x: +$("#mpX").value, y: +$("#mpY").value, w: +$("#mpW").value, h: +$("#mpH").value };
+        saveState(); renderPins();
+      } else if (selKey !== null) {
+        mvSetPos(selKey, { x: +$("#mpX").value, y: +$("#mpY").value, w: +$("#mpW").value, h: +$("#mpH").value });
+      }
+      ["mpX", "mpY", "mpW", "mpH"].forEach((id) => { const out = document.getElementById(id + "v"); if (out) out.textContent = Math.round(document.getElementById(id).value); });
+    };
+    ["mpX", "mpY", "mpW", "mpH"].forEach((id) => document.getElementById(id).addEventListener("input", commit));
+    $("#mpOp").addEventListener("input", () => { const w = currentWidget(selKey !== null ? selKey : "pins"); w.opacity = +$("#mpOp").value; $("#mpOpv").textContent = +$("#mpOp").value; saveState(); applyWidgets(); });
+    $("#mpBg").addEventListener("input", () => { const w = currentWidget(selKey !== null ? selKey : "pins"); w.bg = +$("#mpBg").value; $("#mpBgv").textContent = +$("#mpBg").value; saveState(); applyWidgets(); });
+    $("#mpVis").addEventListener("change", () => { const w = currentWidget(selKey !== null ? selKey : "pins"); w.visible = $("#mpVis").checked; saveState(); applyWidgets(); });
+    $("#mpFront").addEventListener("click", () => { if (selKey === null || selKey === "weather" || selKey === "todo") return; const p = state.layout[selKey] || {}; p.z = 99; state.layout[selKey] = p; saveState(); applyLayout(); });
+    $("#mpBack").addEventListener("click", () => { if (selKey === null || selKey === "weather" || selKey === "todo") return; const p = state.layout[selKey] || {}; p.z = 1; state.layout[selKey] = p; saveState(); applyLayout(); });
+    $("#mpReset").addEventListener("click", () => {
+      if (selPin !== null) { const pin = currentPins()[selPin]; if (pin) { delete pin.pp; saveState(); renderPins(); } }
+      else if (selKey !== null) mvClearPos(selKey);
+      renderMovePanel();
+    });
+    $("#mpClose").addEventListener("click", clearSel);
+
+    makePanelDraggable(panel, $("#mpHead"), "#mpClose");
+  }
+
+  function makePanelDraggable(panel, head, ignoreSel) {
+    if (!panel || !head) return;
+    head.addEventListener("pointerdown", (e) => {
+      if (e.button !== 0) return;
+      if (ignoreSel && e.target.closest(ignoreSel)) return;
+      e.preventDefault();
+      const rect = panel.getBoundingClientRect();
+      const ox = e.clientX - rect.left, oy = e.clientY - rect.top;
+      const mm = (ev) => {
+        panel.style.left = (ev.clientX - ox) + "px";
+        panel.style.top = (ev.clientY - oy) + "px";
+        panel.style.right = "auto";
+      };
+      const up = () => {
+        window.removeEventListener("pointermove", mm);
+        window.removeEventListener("pointerup", up);
+      };
+      window.addEventListener("pointermove", mm);
+      window.addEventListener("pointerup", up);
+    });
+  }
+
+  let panelSide = "right";
+  function setPanelSide(side) {
+    panelSide = side;
+    ["#movePanel", "#layerPanel"].forEach((sel) => {
+      const p = $(sel); if (!p) return;
+      if (side === "left") { p.style.left = "12px"; p.style.right = "auto"; }
+      else { p.style.right = "12px"; p.style.left = "auto"; }
+    });
+  }
+  function flipPanelsFromPointer(x) {
+    const lp = $("#layerPanel"), mp = $("#movePanel");
+    if (lp.hidden && mp.hidden) return;
+    const half = innerWidth / 2;
+    if (x > half && panelSide !== "left") setPanelSide("left");
+    else if (x < half && panelSide !== "right") setPanelSide("right");
+  }
+
+  // Elements (components + pins) whose box contains a point, topmost first.
+  function stackedElementsAt(x, y) {
+    const items = [];
+    MV_KEYS.forEach((k) => {
+      const el = mvElem(k); if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
+        const z = (state.layout[k] && state.layout[k].z) || 8;
+        items.push({ kind: "comp", key: k, el, z });
+      }
+    });
+    currentPins().forEach((pin, idx) => {
+      const el = document.querySelectorAll("#pinGrid .pin-cell")[idx]; if (!el) return;
+      const r = el.getBoundingClientRect();
+      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) {
+        items.push({ kind: "pin", idx, el, z: (pin.pp && pin.pp.z) || 12 });
+      }
+    });
+    return items.sort((a, b) => b.z - a.z);
+  }
+  function cycleSelectAt(x, y) {
+    const stack = stackedElementsAt(x, y);
+    if (!stack.length) return;
+    const curSel = selPin !== null ? "pin" : (selKey !== null ? selKey : null);
+    const curIdx = stack.findIndex((it) =>
+      it.kind === "comp" ? it.key === curSel : (curSel === "pin" && it.idx === selPin)
+    );
+    const next = stack[(curIdx + 1) % stack.length];
+    if (next.kind === "comp") selectEl(next.key);
+    else selectPin(next.idx, next.el);
+  }
+
+  function addDragInteractions(el, key) {
+    el.addEventListener("pointerdown", (e) => {
+      if (!state.moveMode) return;
+      if (e.button !== 0) return;
+      if (e.target.closest("input, textarea, select, .pin-cell")) return;
+      const resize = !!e.target.closest(".mv-resize");
+      e.preventDefault();
+      const rect = el.getBoundingClientRect();
+      const start = mvGetPos(key);
+      const iw = innerWidth, ih = innerHeight;
+      // Base box + the exact grab offset so the grabbed spot stays under the pointer.
+      const base = start
+        ? { x: start.x, y: start.y, w: start.w || rect.width * 100 / iw, h: start.h || rect.height * 100 / ih }
+        : { x: rect.left * 100 / iw, y: rect.top * 100 / ih, w: rect.width * 100 / iw, h: rect.height * 100 / ih };
+      const offX = (e.clientX - rect.left) * 100 / iw;
+      const offY = (e.clientY - rect.top) * 100 / ih;
+      const sx = e.clientX, sy = e.clientY;
+      let dragged = false;
+      const prevZ = el.style.zIndex;
+      try { el.setPointerCapture(e.pointerId); } catch (err) {}
+      const mm = (ev) => {
+        const dx = ev.clientX - sx, dy = ev.clientY - sy;
+        if (!dragged && Math.abs(dx) + Math.abs(dy) < 4) return;
+        dragged = true;
+        let p;
+        if (resize) {
+          p = { x: base.x, y: base.y, w: clamp(5, 120, base.w + dx * 100 / iw), h: clamp(5, 120, base.h + dy * 100 / ih) };
+        } else {
+          p = { x: clamp(0, 100, (ev.clientX * 100 / iw) - offX), y: clamp(0, 100, (ev.clientY * 100 / ih) - offY), w: base.w, h: base.h };
+        }
+        mvSetPos(key, p);
+        el.classList.add("dragging");
+        el.style.zIndex = "99";
+        flipPanelsFromPointer(ev.clientX);
+      };
+      const up = () => {
+        el.removeEventListener("pointermove", mm);
+        el.removeEventListener("pointerup", up);
+        el.removeEventListener("pointercancel", up);
+        el.classList.remove("dragging");
+        el.style.zIndex = prevZ;
+        if (!dragged) cycleSelectAt(sx, sy);
+      };
+      el.addEventListener("pointermove", mm);
+      el.addEventListener("pointerup", up);
+      el.addEventListener("pointercancel", up);
+    });
+  }
+
+  function addPinDragInteractions(pinEl, idx) {
+    pinEl.addEventListener("pointerdown", (e) => {
+      if (!state.moveMode) return;
+      if (e.button !== 0) return;
+      e.preventDefault();
+      const pin = currentPins()[idx]; if (!pin) return;
+      const pp = pin.pp || {};
+      const r = pinEl.getBoundingClientRect();
+      const iw = innerWidth, ih = innerHeight;
+      // Base box + exact grab offset so the grabbed point stays under the pointer.
+      const base = {
+        x: pp.x != null ? pp.x : r.left * 100 / iw,
+        y: pp.y != null ? pp.y : r.top * 100 / ih,
+        w: pp.w != null ? pp.w : r.width * 100 / iw,
+        h: pp.h != null ? pp.h : r.height * 100 / ih,
+      };
+      const offX = (e.clientX - r.left) * 100 / iw;
+      const offY = (e.clientY - r.top) * 100 / ih;
+      const sx = e.clientX, sy = e.clientY;
+      let dragged = false;
+      let lastX = sx, lastY = sy;
+      const paint = (p) => {
+        pinEl.style.position = "fixed";
+        pinEl.style.left = p.x + "%"; pinEl.style.top = p.y + "%";
+        pinEl.style.width = p.w + "%"; pinEl.style.height = p.h + "%";
+        pinEl.style.zIndex = p.z || "12";
+      };
+      const commit = (p) => {
+        pin.pp = { x: Math.round(clamp(0, 100, p.x)), y: Math.round(clamp(0, 100, p.y)), w: Math.round(clamp(5, 120, p.w)), h: Math.round(clamp(5, 120, p.h)), z: p.z || (pin.pp && pin.pp.z) || 12 };
+        paint(pin.pp);
+        saveState();
+      };
+      try { pinEl.setPointerCapture(e.pointerId); } catch (err) {}
+      const mm = (ev) => {
+        const dx = ev.clientX - sx, dy = ev.clientY - sy;
+        if (!dragged && Math.abs(dx) + Math.abs(dy) < 4) return;
+        dragged = true;
+        lastX = ev.clientX; lastY = ev.clientY;
+        pinEl.classList.add("dragging");
+        paint({ x: (lastX * 100 / iw) - offX, y: (lastY * 100 / ih) - offY, w: base.w, h: base.h });
+        flipPanelsFromPointer(lastX);
+      };
+      const up = () => {
+        pinEl.removeEventListener("pointermove", mm);
+        pinEl.removeEventListener("pointerup", up);
+        pinEl.removeEventListener("pointercancel", up);
+        pinEl.classList.remove("dragging");
+        if (!dragged) commit({ x: sx * 100 / iw - offX, y: sy * 100 / ih - offY, w: base.w, h: base.h });
+        else commit({ x: lastX * 100 / iw - offX, y: lastY * 100 / ih - offY, w: base.w, h: base.h });
+        if (!dragged) cycleSelectAt(sx, sy);
+      };
+      pinEl.addEventListener("pointermove", mm);
+      pinEl.addEventListener("pointerup", up);
+      pinEl.addEventListener("pointercancel", up);
+    });
+  }
+
+  function syncMoveMode() {
+    const on = !!state.moveMode;
+    document.body.classList.toggle("move-mode", on);
+    $$("#mvSeg button").forEach((b) => b.classList.toggle("active", (b.dataset.mv === "on") === on));
+    const lb = $("#btnLayers");
+    if (lb) lb.style.display = on ? "" : "none";
+    if (!on) setPanelSide("right");
+    const lp = $("#layerPanel");
+    if (lp) { if (on) { renderLayers(); lp.hidden = false; } else lp.hidden = true; }
+    if (!on) clearSel(); else renderMovePanel();
+  }
+
+  function initMoveLayer() {
+    bindMovePanel();
+    makePanelDraggable($("#layerPanel"), $("#layerHead"), "#layerClose");
+    MV_KEYS.forEach((k) => {
+      const el = mvElem(k); if (!el) return;
+      el.classList.add("mv-el");
+      const h = document.createElement("span"); h.className = "mv-handle"; h.title = "Drag"; el.appendChild(h);
+      const r = document.createElement("span"); r.className = "mv-resize"; r.title = "Resize"; el.appendChild(r);
+      addDragInteractions(el, k);
+    });
+    $$("#mvSeg button").forEach((b) => b.addEventListener("click", () => { state.moveMode = b.dataset.mv === "on"; saveState(); syncMoveMode(); }));
+    document.addEventListener("keydown", (e) => {
+      // Ignore when typing in a field.
+      const t = e.target;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable)) return;
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "m") {
+        e.preventDefault();
+        state.moveMode = !state.moveMode; saveState(); syncMoveMode();
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "l") {
+        e.preventDefault();
+        if (!state.moveMode) { state.moveMode = true; saveState(); syncMoveMode(); }
+        const lp = $("#layerPanel");
+        if (lp) { if (lp.hidden) { renderLayers(); lp.hidden = false; } else lp.hidden = true; }
+        return;
+      }
+      if (!state.moveMode) return;
+      if (e.key === "Escape") {
+        if (selKey !== null || selPin !== null) clearSel();
+        else { state.moveMode = false; saveState(); syncMoveMode(); }
+        return;
+      }
+      // Arrow keys nudge the selected element (0.5% per step).
+      const steps = { ArrowLeft: [-0.5, 0], ArrowRight: [0.5, 0], ArrowUp: [0, -0.5], ArrowDown: [0, 0.5] };
+      const step = steps[e.key];
+      if (step) {
+        if (selPin !== null) {
+          const pin = currentPins()[selPin]; if (!pin) return;
+          const pp = pin.pp || { x: 0, y: 0, w: 0, h: 0 };
+          pin.pp = { ...pp, x: clamp(0, 100, pp.x + step[0]), y: clamp(0, 100, pp.y + step[1]) };
+          saveState(); renderPins(); renderMovePanel();
+        } else if (selKey !== null) {
+          const p = mvGetPos(selKey) || { x: 50, y: 50, w: 30, h: 30 };
+          mvSetPos(selKey, { ...p, x: clamp(0, 100, p.x + step[0]), y: clamp(0, 100, p.y + step[1]) });
+        }
+      }
+    });
+    syncMoveMode();
+  }
+
   /* ---------- Custom dropdowns (arrow keys auto-apply) ---------- */
   const ENHANCE_SELECTS = ["clockStyleSelect", "searchStyleSelect", "fontSelect", "engineSelect", "clockFormatSelect", "dateFormatSelect", "bgTypeSelect", "gearPosSelect"];
   function enhanceSelect(id) {
@@ -1717,6 +2160,15 @@
         `<svg class="sec-caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>`;
       head.addEventListener("click", () => {
         const nowOpen = !sec.classList.contains("open");
+        if (nowOpen) {
+          // Accordion: opening one section closes the others in the same panel.
+          panel.querySelectorAll(".setting-section.open").forEach((other) => {
+            if (other !== sec) {
+              other.classList.remove("open");
+              other.querySelector(".setting-sec-head").setAttribute("aria-expanded", "false");
+            }
+          });
+        }
         sec.classList.toggle("open", nowOpen);
         head.setAttribute("aria-expanded", String(nowOpen));
       });
@@ -1753,7 +2205,7 @@
     setTimerMin(state.focusTimes.focus);
 
     applyVisuals();
-    renderWallpaperGrid();
+    renderThemeControls();
     renderSelects();
     refreshEnhancedSelects();
     renderDock();
@@ -1769,6 +2221,8 @@
     applyWidgets();
     renderTodos();
     applyTodoPos();
+    applyLayout();
+    initMoveLayer();
     if (state.weatherEnabled && state.widgets.weather.visible) loadWeather(false);
     if (state.quoteEnabled && state.widgets.quote.visible) loadQuote();
     applyCompact();
@@ -1780,6 +2234,7 @@
     // right-click: pins open the pin editor; any other component opens its config menu
     document.addEventListener("contextmenu", (e) => {
       e.preventDefault();
+      if (state.moveMode) return;
       const pin = e.target.closest(".pin-cell");
       if (pin) {
         const idx = Array.prototype.indexOf.call($("#pinGrid").children, pin);
@@ -1804,6 +2259,16 @@
       const panel = $("#settingsPanel");
       if (panel.classList.contains("open")) closeSettings();
       else openSettings();
+    });
+    $("#btnLayers").addEventListener("click", () => {
+      const lp = $("#layerPanel");
+      if (!lp.hidden) lp.hidden = true;
+      else openLayers();
+    });
+    $("#layerClose").addEventListener("click", () => { $("#layerPanel").hidden = true; });
+    document.addEventListener("click", (e) => {
+      const lp = $("#layerPanel");
+      if (!lp.hidden && !lp.contains(e.target) && !e.target.closest("#btnLayers")) lp.hidden = true;
     });
     $("#settingsClose").addEventListener("click", closeSettings);
     $("#settingsBackdrop").addEventListener("click", () => {
@@ -1898,6 +2363,29 @@
         } catch (err) { alert("That doesn't look like a valid config file."); }
       };
       reader.readAsText(f);
+    });
+    $("#resetLayoutBtn").addEventListener("click", async () => {
+      const ok = await confirm("Move all components and pins back to their default positions? Your settings stay unchanged.", "Reset layout");
+      if (!ok) return;
+      state.layout = {};
+      state.tabs.forEach((t) => (t.pins || []).forEach((pin) => { delete pin.pp; }));
+      MV_KEYS.forEach((k) => {
+        const el = mvElem(k); if (!el) return;
+        ["position", "left", "top", "width", "height", "zIndex"].forEach((p) => el.style.removeProperty(p));
+      });
+      applyLayout();
+      renderPins();
+      flushState();
+      clearSel();
+    });
+    $("#resetAllBtn").addEventListener("click", async () => {
+      const ok = await confirm("Reset everything to its original defaults? All pins, components, themes, and settings will be cleared.", "Reset all settings");
+      if (!ok) return;
+      _suppressFlush = true;
+      if (_saveTimer) clearTimeout(_saveTimer);
+      try { localStorage.removeItem("home"); } catch (e) {}
+      if (chrome.storage && chrome.storage.local) { try { chrome.storage.local.remove("home_state"); } catch (e) {} }
+      location.reload();
     });
     // Arrow keys cycle any focused select to switch styles instantly (capture phase)
     document.addEventListener("keydown", (e) => {
@@ -1997,6 +2485,7 @@
     $("#savedDownload").addEventListener("click", () => downloadJson("home-saved-quotes.json", state.savedQuotes));
 
     // focus durations
+    $("#timerFormatSelect").addEventListener("change", (e) => { state.timerFormat = e.target.value; saveState(); renderTimer(); });
     $("#focusDur").addEventListener("change", (e) => { state.focusTimes.focus = clamp(1, 180, +e.target.value || 25); saveState(); renderSettings(); });
     $("#breakDur").addEventListener("change", (e) => { state.focusTimes.br = clamp(1, 60, +e.target.value || 5); saveState(); renderSettings(); });
     $("#deepDur").addEventListener("change", (e) => { state.focusTimes.deep = clamp(1, 240, +e.target.value || 50); saveState(); renderSettings(); });
@@ -2044,7 +2533,12 @@
       state.sliders = { blur: 0, bright: 100, tint: 30 };
       saveState(); applyVisuals(); renderSettings();
     });
-    $("#wallShuffle").addEventListener("click", shuffleWallpaper);
+    $("#wallShuffle").addEventListener("click", randomTheme);
+    const THEME_KEYS = [["bg1", "#themeBg1"], ["bg2", "#themeBg2"], ["accent", "#themeAccent"], ["accent2", "#themeAccent2"], ["accent3", "#themeAccent3"]];
+    for (const [key, sel] of THEME_KEYS) {
+      $(sel).addEventListener("input", (e) => applyThemeColor(key, e.target.value));
+    }
+    $$("#themeDarkSeg button").forEach((b) => b.addEventListener("click", () => { state.theme.dark = b.dataset.dark === "on"; saveState(); renderThemeControls(); applyVisuals(); }));
     $("#searchWidth").addEventListener("input", (e) => { state.searchWidth = +e.target.value; applySearchStyle(); saveState(); });
     $("#searchTrans").addEventListener("input", (e) => { state.searchTrans = +e.target.value; applySearchStyle(); saveState(); });
     $("#searchPlaceholder").addEventListener("change", (e) => {
